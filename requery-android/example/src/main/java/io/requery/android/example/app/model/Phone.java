@@ -16,9 +16,10 @@
 
 package io.requery.android.example.app.model;
 
+import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.Observable;
 import android.os.Parcelable;
+
 import io.requery.Entity;
 import io.requery.Generated;
 import io.requery.Key;
@@ -29,18 +30,40 @@ import io.requery.android.example.app.Binding;
 
 @Entity
 @BindingResource(Binding.BR_CLASS)
-public interface Phone extends Observable, Parcelable, Persistable {
+public abstract class Phone extends BaseObservable implements Parcelable, Persistable {
 
-    @Key @Generated
-    int getId();
+    @Key
+    @Generated
+    public int id;
 
     @Bindable
-    String getPhoneNumber();
-    void setPhoneNumber(String phoneNumber);
+    public String phoneNumber;
 
     @Bindable
     @ManyToOne
-    Person getOwner();
+    public PersonEntity owner;
 
-    void setOwner(Person person);
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public PersonEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(PersonEntity owner) {
+        this.owner = owner;
+    }
 }

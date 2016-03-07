@@ -27,10 +27,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import io.requery.Persistable;
 import io.requery.android.QueryRecyclerAdapter;
 import io.requery.android.example.app.databinding.PersonItemBinding;
-import io.requery.android.example.app.model.Person;
 import io.requery.android.example.app.model.PersonEntity;
 import io.requery.query.Result;
 import io.requery.rx.SingleEntityStore;
@@ -38,10 +42,6 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Activity displaying a list of random people. You can tap on a person to edit their record.
@@ -68,28 +68,28 @@ public class PeopleActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        data.count(Person.class).get().toSingle()
-            .subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                if (integer == 0) {
-                    Observable.fromCallable(new CreatePeople(data))
-                        .flatMap(new Func1<Observable<Iterable<Person>>, Observable<?>>() {
-                            @Override
-                            public Observable<?> call(Observable<Iterable<Person>> o) {
-                                return o;
-                            }
-                        })
-                        .observeOn(Schedulers.computation())
-                        .subscribe(new Action1<Object>() {
-                            @Override
-                            public void call(Object o) {
-                                adapter.queryAsync();
-                            }
-                        });
-                }
-            }
-        });
+        data.count(PersonEntity.class).get().toSingle()
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        if (integer == 0) {
+                            Observable.fromCallable(new CreatePeople(data))
+                                    .flatMap((Func1<Observable<Iterable<PersonEntity>>, Observable<?>>) new Func1<Observable<Iterable<PersonEntity>>, Observable<?>>() {
+                                        @Override
+                                        public Observable<?> call(Observable<Iterable<PersonEntity>> o) {
+                                            return o;
+                                        }
+                                    })
+                                    .observeOn(Schedulers.computation())
+                                    .subscribe(new Action1<Object>() {
+                                        @Override
+                                        public void call(Object o) {
+                                            adapter.queryAsync();
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     @Override
@@ -126,7 +126,7 @@ public class PeopleActivity extends AppCompatActivity {
             BindingHolder<PersonItemBinding>> implements View.OnClickListener {
 
         private final Random random = new Random();
-        private final int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA };
+        private final int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA};
 
         protected PersonAdapter() {
             super(PersonEntity.$TYPE);

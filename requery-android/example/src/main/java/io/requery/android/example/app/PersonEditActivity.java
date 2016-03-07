@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import io.requery.Persistable;
 import io.requery.android.example.app.databinding.ActivityEditPersonBinding;
 import io.requery.android.example.app.model.Address;
@@ -58,15 +59,15 @@ public class PersonEditActivity extends AppCompatActivity {
             binding.setPerson(person);
         } else {
             data.findByKey(PersonEntity.class, personId)
-                .toObservable()
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<PersonEntity>() {
-                @Override
-                public void call(PersonEntity person) {
-                    PersonEditActivity.this.person = person;
-                    binding.setPerson(person);
-                }
-            });
+                    .toObservable()
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<PersonEntity>() {
+                        @Override
+                        public void call(PersonEntity person) {
+                            PersonEditActivity.this.person = person;
+                            binding.setPerson(person);
+                        }
+                    });
         }
     }
 

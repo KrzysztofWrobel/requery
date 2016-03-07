@@ -1,6 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <variable name="person" type="io.requery.android.example.app.model.Person"/>
+        <variable name="person" type="io.requery.android.example.app.model.PersonEntity"/>
     </data>
 <RelativeLayout
                 android:layout_width="match_parent"

@@ -16,13 +16,6 @@
 
 package io.requery.android.example.app;
 
-import io.requery.Persistable;
-import io.requery.android.example.app.model.AddressEntity;
-import io.requery.android.example.app.model.Person;
-import io.requery.android.example.app.model.PersonEntity;
-import io.requery.rx.SingleEntityStore;
-import rx.Observable;
-
 import java.util.Comparator;
 import java.util.Random;
 import java.util.Set;
@@ -30,7 +23,13 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-class CreatePeople implements Callable<Observable<Iterable<Person>>> {
+import io.requery.Persistable;
+import io.requery.android.example.app.model.AddressEntity;
+import io.requery.android.example.app.model.PersonEntity;
+import io.requery.rx.SingleEntityStore;
+import rx.Observable;
+
+class CreatePeople implements Callable<Observable<Iterable<PersonEntity>>> {
 
     private final SingleEntityStore<Persistable> data;
 
@@ -39,7 +38,7 @@ class CreatePeople implements Callable<Observable<Iterable<Person>>> {
     }
 
     @Override
-    public Observable<Iterable<Person>> call() {
+    public Observable<Iterable<PersonEntity>> call() {
         String[] firstNames = new String[]{
                 "Alice", "Bob", "Carol", "Chloe", "Dan", "Emily", "Emma", "Eric", "Eva",
                 "Frank", "Gary", "Helen", "Jack", "James", "Jane",
@@ -49,12 +48,12 @@ class CreatePeople implements Callable<Observable<Iterable<Person>>> {
         String[] lastNames = new String[]{
                 "Hall", "Hill", "Smith", "Lee", "Jones", "Taylor", "Williams", "Jackson",
                 "Stone", "Brown", "Thomas", "Clark", "Lewis", "Miller", "Walker", "Fox",
-                "Robinson", "Wilson", "Cook", "Carter", "Cooper", "Martin" };
+                "Robinson", "Wilson", "Cook", "Carter", "Cooper", "Martin"};
         Random random = new Random();
 
-        final Set<Person> people = new TreeSet<>(new Comparator<Person>() {
+        final Set<PersonEntity> people = new TreeSet<>((Comparator<PersonEntity>) new Comparator<PersonEntity>() {
             @Override
-            public int compare(Person lhs, Person rhs) {
+            public int compare(PersonEntity lhs, PersonEntity rhs) {
                 return lhs.getName().compareTo(rhs.getName());
             }
         });
