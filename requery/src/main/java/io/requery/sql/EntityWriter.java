@@ -734,7 +734,7 @@ class EntityWriter<E extends S, S> implements ParameterBinder<E> {
         EntityProxy<U> proxy = context.proxyOf(entity, false);
         if (proxy != null && !proxy.isLinked()) {
             EntityWriter<U, S> writer = context.write(proxy.type().classType());
-            writer.insert(entity, proxy);
+            writer.update(entity, proxy);
         }
     }
 
